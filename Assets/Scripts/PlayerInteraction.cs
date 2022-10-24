@@ -43,10 +43,13 @@ public class PlayerInteraction : MonoBehaviour {
 
         _interactionUIText.text = "E Examine";
         
+        // get screen position of mouse
         var target = _hitInfo.transform;
         Vector3 targetScreenPosition = _mainCamera.WorldToScreenPoint(target.transform.position);
         
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(_parentUIElement, targetScreenPosition, null, out Vector2 finalPos);
+        //get local pos of Rect from screen pos
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(_parentUIElement, targetScreenPosition, null,
+            out Vector2 finalPos);
         interactionUI.anchoredPosition = finalPos;
     }
 
@@ -62,7 +65,7 @@ public class PlayerInteraction : MonoBehaviour {
                 Vector3 directionToTarget = (target.transform.position - transform.position).normalized;
 
                 if (Vector3.Angle(transform.forward, directionToTarget) < 80f / 2) {
-                    if (Physics.Raycast(transform.position, transform.forward, out _hitInfo, radius,
+                    if (Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out _hitInfo, radius,
                             interactableLayer)) {
                         _targetInteractableComponent = _hitInfo.transform.GetComponent<IInteractable>();
                         if (_targetInteractableComponent != null) {
